@@ -9,8 +9,8 @@ import "google/protobuf/timestamp.proto";
 service UserService {
     rpc GetUsers(google.protobuf.Empty) returns (Users);
     rpc GetUser(Id) returns (User);
-    rpc CreateUser(User) returns (Id);
-    rpc UpdateUser(User) returns (Status);
+    rpc CreateUser(UserSignupRequest) returns (Id);
+    rpc UpdateUser(UserEditRequest) returns (Status);
     rpc DeleteUser(Id) returns (Status);
 }
 
@@ -25,7 +25,6 @@ message User {
     int64 balance = 4;
     google.protobuf.Timestamp created_at = 5;
     google.protobuf.Timestamp updated_at = 6;
-    google.protobuf.Timestamp deleted_at = 7;
 }
 
 message Id {
@@ -34,4 +33,16 @@ message Id {
 
 message Status {
     uint32 status = 1;
+}
+
+message UserSignupRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message UserEditRequest {
+    uint64 id = 1;
+    string username = 2;
+    string password = 3;
+    int64 balance = 4;
 }

@@ -25,8 +25,8 @@ const _ = grpc.SupportPackageIsVersion7
 type UserServiceClient interface {
 	GetUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Users, error)
 	GetUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
-	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Id, error)
-	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	CreateUser(ctx context.Context, in *UserSignupRequest, opts ...grpc.CallOption) (*Id, error)
+	UpdateUser(ctx context.Context, in *UserEditRequest, opts ...grpc.CallOption) (*Status, error)
 	DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
 }
 
@@ -56,7 +56,7 @@ func (c *userServiceClient) GetUser(ctx context.Context, in *Id, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Id, error) {
+func (c *userServiceClient) CreateUser(ctx context.Context, in *UserSignupRequest, opts ...grpc.CallOption) (*Id, error) {
 	out := new(Id)
 	err := c.cc.Invoke(ctx, "/model.UserService/CreateUser", in, out, opts...)
 	if err != nil {
@@ -65,7 +65,7 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *User, opts ...gr
 	return out, nil
 }
 
-func (c *userServiceClient) UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+func (c *userServiceClient) UpdateUser(ctx context.Context, in *UserEditRequest, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
 	err := c.cc.Invoke(ctx, "/model.UserService/UpdateUser", in, out, opts...)
 	if err != nil {
@@ -89,8 +89,8 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *Id, opts ...grpc
 type UserServiceServer interface {
 	GetUsers(context.Context, *emptypb.Empty) (*Users, error)
 	GetUser(context.Context, *Id) (*User, error)
-	CreateUser(context.Context, *User) (*Id, error)
-	UpdateUser(context.Context, *User) (*Status, error)
+	CreateUser(context.Context, *UserSignupRequest) (*Id, error)
+	UpdateUser(context.Context, *UserEditRequest) (*Status, error)
 	DeleteUser(context.Context, *Id) (*Status, error)
 }
 
@@ -104,10 +104,10 @@ func (UnimplementedUserServiceServer) GetUsers(context.Context, *emptypb.Empty) 
 func (UnimplementedUserServiceServer) GetUser(context.Context, *Id) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedUserServiceServer) CreateUser(context.Context, *User) (*Id, error) {
+func (UnimplementedUserServiceServer) CreateUser(context.Context, *UserSignupRequest) (*Id, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserServiceServer) UpdateUser(context.Context, *User) (*Status, error) {
+func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UserEditRequest) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
 func (UnimplementedUserServiceServer) DeleteUser(context.Context, *Id) (*Status, error) {
@@ -162,7 +162,7 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
+	in := new(UserSignupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -174,13 +174,13 @@ func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/model.UserService/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateUser(ctx, req.(*User))
+		return srv.(UserServiceServer).CreateUser(ctx, req.(*UserSignupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _UserService_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
+	in := new(UserEditRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func _UserService_UpdateUser_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/model.UserService/UpdateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).UpdateUser(ctx, req.(*User))
+		return srv.(UserServiceServer).UpdateUser(ctx, req.(*UserEditRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
